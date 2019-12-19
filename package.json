@@ -23,7 +23,7 @@
     "lint": "eslint lib/** test/**"
   },
   "engines": {
-    "node": ">= 10.x"
+    "node": ">= v10.18.0"
   },
   "author": "Hunter Loftis <hunter@hunterloftis.com>",
   "license": "MIT",
