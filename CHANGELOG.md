@@ -1,3 +1,10 @@
+# [5.1.0](https://github.com/pagerinc/jackrabbit/compare/v5.0.10...v5.1.0) (2020-07-17)
+
+
+### Features
+
+* handle backpressure with publishSafe [PSS-330] ([#318](https://github.com/pagerinc/jackrabbit/issues/318)) ([c2bd6ee](https://github.com/pagerinc/jackrabbit/commit/c2bd6ee29adb79ed30254b0c953966b75020af75))
+
 ## [5.0.10](https://github.com/pagerinc/jackrabbit/compare/v5.0.9...v5.0.10) (2020-04-30)
 
 
