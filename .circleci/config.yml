@@ -16,7 +16,15 @@ jobs:
 
     - run:
         name: Audit dependencies
-        command: npm audit
+        command: |
+          set +e
+          set +o pipefail
+          if [ -f ".nsprc" ]; then
+            sudo npm install --global --quiet audit-filter@0.5;
+            npm audit --production --json | audit-filter;
+          else
+            npm audit --production;
+          fi
 
     - restore_cache:
         keys:
@@ -26,6 +34,7 @@ jobs:
 
     - run: npm install
     - run: npm run lint
+
     - run:
         name: Wait for RabbitMQ to receive connections
         command: dockerize -wait tcp://localhost:5672 -timeout 1m
