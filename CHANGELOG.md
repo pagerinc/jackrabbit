@@ -1,3 +1,10 @@
+## [5.2.1](https://github.com/pagerinc/jackrabbit/compare/v5.2.0...v5.2.1) (2020-07-20)
+
+
+### Bug Fixes
+
+* return publish result ([#320](https://github.com/pagerinc/jackrabbit/issues/320)) ([e6166ec](https://github.com/pagerinc/jackrabbit/commit/e6166ec2a906c658a5725dcf8dc48d355c1a7a61))
+
 # [5.2.0](https://github.com/pagerinc/jackrabbit/compare/v5.1.0...v5.2.0) (2020-07-20)
 
 
