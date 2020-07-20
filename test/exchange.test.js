@@ -3,6 +3,7 @@
 const Assert = require('chai').assert;
 const Amqp = require('amqplib/callback_api');
 const Exchange = require('../lib/exchange');
+const Sinon = require('sinon');
 const { v4: Uuid } = require('uuid');
 
 const { afterEach, beforeEach, describe, it } = require('mocha');
@@ -86,6 +87,82 @@ describe('exchange', () => {
             Exchange('', 'direct')
                 .connect(connection)
                 .once('connected', done);
+        });
+    });
+
+    describe('#getWritableStream', () => {
+
+        let connection;
+
+        beforeEach((done) => {
+
+            Amqp.connect(process.env.RABBIT_URL, (err, conn) => {
+
+                Assert.ok(!err);
+                connection = conn;
+                done();
+            });
+        });
+
+        afterEach((done) => {
+
+            Sinon.restore();
+            connection.close(done);
+        });
+
+        it('calls callback in nextTick if channel.publish returns true', async () => {
+
+            const channel = await new Promise((resolve) => {
+
+                connection.createChannel((_err, chan) => {
+
+                    resolve(chan);
+                });
+            });
+
+            Sinon.stub(channel, 'publish').returns(true);
+            Sinon.stub(connection, 'createChannel').yields(null, channel);
+            const clock = Sinon.useFakeTimers({
+                now: 1483228800000,
+                toFake: ['nextTick']
+            });
+
+            const exchange = Exchange('', 'direct').connect(connection);
+            const stream = exchange.getWritableStream();
+            const callbackSpy = Sinon.spy();
+
+            stream.write({ key: 'key', headers: {}, data: {} }, '', callbackSpy);
+
+            clock.runAll();
+            Assert.isOk(callbackSpy.called);
+        });
+
+        it('waits for drain event if channel.publish returns false', async () => {
+
+            const channel = await new Promise((resolve) => {
+
+                connection.createChannel((_err, chan) => {
+
+                    resolve(chan);
+                });
+            });
+
+            Sinon.stub(channel, 'publish').returns(false);
+            Sinon.stub(connection, 'createChannel').yields(null, channel);
+            const clock = Sinon.useFakeTimers({
+                now: 1483228800000,
+                toFake: ['nextTick']
+            });
+
+            const exchange = Exchange('', 'direct').connect(connection);
+            const stream = exchange.getWritableStream();
+            const callbackSpy = Sinon.spy();
+
+            stream.write({ key: 'key', headers: {}, data: {} }, '', callbackSpy);
+            channel.emit('drain');
+
+            clock.runAll();
+            Assert.isOk(callbackSpy.called);
         });
     });
 

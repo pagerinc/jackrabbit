@@ -43,7 +43,8 @@
     "eslint-config-hapi": "12.x",
     "eslint-plugin-hapi": "4.x",
     "mocha": "7.x",
-    "semantic-release": "17.x"
+    "semantic-release": "17.x",
+    "sinon": "9.x"
   },
   "mocha": {
     "bail": true,
