@@ -1,3 +1,10 @@
+# [5.2.0](https://github.com/pagerinc/jackrabbit/compare/v5.1.0...v5.2.0) (2020-07-20)
+
+
+### Features
+
+* handle backpressure with streams ([#319](https://github.com/pagerinc/jackrabbit/issues/319)) ([016666c](https://github.com/pagerinc/jackrabbit/commit/016666cd07a6acdf8b0be8c18be2bbe2bd283126))
+
 # [5.1.0](https://github.com/pagerinc/jackrabbit/compare/v5.0.10...v5.1.0) (2020-07-17)
 
 
