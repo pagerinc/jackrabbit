@@ -39,7 +39,7 @@
   "devDependencies": {
     "@pager/semantic-release-config": "1.x",
     "chai": "4.x",
-    "eslint": "6.x",
+    "eslint": "7.x",
     "eslint-config-hapi": "12.x",
     "eslint-plugin-hapi": "4.x",
     "mocha": "7.x",
