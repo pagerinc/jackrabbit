@@ -32,7 +32,7 @@
     "Hunter Loftis <hunter@hunterloftis.com>"
   ],
   "dependencies": {
-    "amqplib": "0.5.x",
+    "amqplib": "0.6.x",
     "lodash.assignin": "4.x",
     "uuid": "7.x"
   },
