@@ -1,3 +1,10 @@
+## [5.2.2](https://github.com/pagerinc/jackrabbit/compare/v5.2.1...v5.2.2) (2020-08-04)
+
+
+### Bug Fixes
+
+* **deps:** update dependency uuid to v8 ([#300](https://github.com/pagerinc/jackrabbit/issues/300)) ([243ddf5](https://github.com/pagerinc/jackrabbit/commit/243ddf5f3a30853df9e29171de7ad27c78054afe))
+
 ## [5.2.1](https://github.com/pagerinc/jackrabbit/compare/v5.2.0...v5.2.1) (2020-07-20)
 
 
