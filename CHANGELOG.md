@@ -1,3 +1,10 @@
+## [5.2.3](https://github.com/pagerinc/jackrabbit/compare/v5.2.2...v5.2.3) (2020-08-04)
+
+
+### Bug Fixes
+
+* **deps:** update dependency amqplib to 0.6.x ([#317](https://github.com/pagerinc/jackrabbit/issues/317)) ([b9024f9](https://github.com/pagerinc/jackrabbit/commit/b9024f9792cd0f4bed1b510f52b2f7e6b447477f))
+
 ## [5.2.2](https://github.com/pagerinc/jackrabbit/compare/v5.2.1...v5.2.2) (2020-08-04)
 
 
