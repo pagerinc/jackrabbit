@@ -38,17 +38,6 @@ describe('jackrabbit', () => {
                 Assert.throws(Jackrabbit, 'url required');
             });
         });
-
-        // describe('with an invalid url', () => {
-        //   it('emits an "error" event', (done) => {
-        //     jackrabbit('amqp://1.2')
-        //       .once('error', function(err) {
-        //         assert.ok(err);
-        //         done();
-        //       });
-        //   });
-        // });
-
     });
 
     describe('#default', () => {
