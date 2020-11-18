@@ -22,6 +22,14 @@
   "homepage": "https://github.com/pagerinc/jackrabbit",
   "bugs": "https://github.com/pagerinc/jackrabbit/issues",
   "main": "lib/jackrabbit.js",
+  "renovate": {
+    "extends": [
+      "github>pagerinc/renovate-config"
+    ],
+    "lockFileMaintenance": {
+      "enabled": false
+    }
+  },
   "engines": {
     "node": ">= v10.18.0"
   },
