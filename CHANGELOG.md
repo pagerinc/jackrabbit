@@ -1,3 +1,10 @@
+## [5.2.4](https://github.com/pagerinc/jackrabbit/compare/v5.2.3...v5.2.4) (2020-11-18)
+
+
+### Bug Fixes
+
+* avoid creating to many EE listeners [CS-2836] ([#485](https://github.com/pagerinc/jackrabbit/issues/485)) ([c41d3ea](https://github.com/pagerinc/jackrabbit/commit/c41d3ea0632c1731edf2cd2dc81237491955bb5e))
+
 ## [5.2.3](https://github.com/pagerinc/jackrabbit/compare/v5.2.2...v5.2.3) (2020-08-04)
 
 
