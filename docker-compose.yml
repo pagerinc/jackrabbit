@@ -14,7 +14,7 @@ services:
     entrypoint: ['node', 'examples/7-timeout-rpc/client']
     restart: on-failure
   rabbit:
-    image: rabbitmq:3.8.9-management-alpine@sha256:f9cde149e753a99f1fd28f63aa5b3cd4182a31d4f0be412cbe41ba5117ed7a26
+    image: rabbitmq:3.8.9-management-alpine@sha256:43fb8dd7521f5284cef969e6f5c95067b4ab8b8e4f708a7cfb0fe65ba46857ad
     ports:
       - "5673:5672"
       - "15673:15672"
