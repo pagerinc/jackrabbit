@@ -60,6 +60,18 @@ rabbit
   })
 ```
 
+## Events
+
+```js
+rabbit.default()
+  .on('error', (error) => { ... })
+  .on('connected', () => { ... })
+  .on('close', () => { ... })
+  .on('blocked', (cause) => { ... })
+  .on('unblocked', () => { ... })
+  ...
+```
+
 ## More Examples
 
 For now, the best usage help is can be found in [examples](https://github.com/pagerinc/jackrabbit/tree/master/examples),
