@@ -276,13 +276,7 @@ describe('jackrabbit', () => {
                 rabbit.getInternals().connection.on('close', () => {
 
                     Assert.ok(!rabbit.getInternals().connection);
-
-                    try {
-                        Assert.ok(!rabbit.isConnectionReady());
-                    }
-                    catch (err) {
-                        Assert.equal('no connection established', err.message);
-                    }
+                    Assert.ok(!rabbit.isConnectionReady());
 
                     done();
                 });
