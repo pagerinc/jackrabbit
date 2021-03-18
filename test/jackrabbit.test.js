@@ -26,9 +26,12 @@ describe('jackrabbit', () => {
 
             it('references a Connection object', () => {
 
-                const c = rabbit.getInternals().connection;
+                const internals = rabbit.getInternals();
+                const c = internals.connection;
                 Assert.ok(c.connection.stream.writable);
+                Assert.ok(rabbit.isConnectionReady());
             });
+
         });
 
         describe('without a server url', () => {
@@ -273,6 +276,8 @@ describe('jackrabbit', () => {
                 rabbit.getInternals().connection.on('close', () => {
 
                     Assert.ok(!rabbit.getInternals().connection);
+                    Assert.ok(!rabbit.isConnectionReady());
+
                     done();
                 });
             });
