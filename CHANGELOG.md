@@ -1,3 +1,10 @@
+# [5.3.0](https://github.com/pagerinc/jackrabbit/compare/v5.2.5...v5.3.0) (2021-03-18)
+
+
+### Features
+
+* add isConnectionReady function [UE-2535] ([#656](https://github.com/pagerinc/jackrabbit/issues/656)) ([512b953](https://github.com/pagerinc/jackrabbit/commit/512b95374eb26fdc046cdfe256c7680f4dd09966))
+
 ## [5.2.5](https://github.com/pagerinc/jackrabbit/compare/v5.2.4...v5.2.5) (2021-03-16)
 
 
