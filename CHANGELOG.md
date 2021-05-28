@@ -1,3 +1,10 @@
+## [5.3.1](https://github.com/pagerinc/jackrabbit/compare/v5.3.0...v5.3.1) (2021-05-28)
+
+
+### Bug Fixes
+
+* handle undefined message [UE-2640] ([#736](https://github.com/pagerinc/jackrabbit/issues/736)) ([d6ce41d](https://github.com/pagerinc/jackrabbit/commit/d6ce41d4f80ef9c27418c02eb1b6ea9e01bbec6a))
+
 # [5.3.0](https://github.com/pagerinc/jackrabbit/compare/v5.2.5...v5.3.0) (2021-03-18)
 
 
