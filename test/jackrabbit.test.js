@@ -11,6 +11,7 @@ describe('jackrabbit', () => {
 
     beforeEach((done) => {
 
+        console.log(process.env.RABBIT_URL);
         rabbit = Jackrabbit(process.env.RABBIT_URL);
         rabbit.once('connected', done);
     });

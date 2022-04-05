@@ -1,7 +1,6 @@
 # Jackrabbit
 
-This is an actively maintained fork of [hunterloftis/jackrabbit], a library for
-RabbitMQ in Node.js without hating life.
+This is a fork of [hunterloftis/jackrabbit].
 
 [![CircleCI](https://circleci.com/gh/pagerinc/jackrabbit.svg?style=svg)](https://circleci.com/gh/pagerinc/jackrabbit)
 
@@ -82,3 +81,18 @@ $ docker-compose up
 ```
 
 [hunterloftis/jackrabbit]: https://github.com/hunterloftis/jackrabbit
+
+## Reconnection
+> Jackrabbit is a wrapper for [ampqlib](https://github.com/amqp-node/amqplib), ampqlib does NOT support reconnection.
+
+This project will try to recover a lost connection gracefully, if it fails to do so, we will throw an `error` event and then exit the current process with code `1`.
+
+Our approach to reconnection is recording all the exchanges and queues created through jackrabbit. Once a connection is lost, we will try to create a new one, update the existing exchange and queue references, initialize a new channel for each queue, and bind each queue's consumers to their new channel. This should be transparent to any users of this lib.
+
+You can configure some basic parameters of the reconnection process with some env vars:
+
+Name|Default|Description
+-|-|-
+`RECONNECTION_TIMEOUT`| 2000 | ms between each reconnection attempt. The first attempt will always be immediate.
+`RECONNECTION_RETRIES`| 20 | Amount of retries before erroring out and killing the node process.
+`RECONNECTION_EXACT_TIMEOUT` | false | To prevent total outages on HA services, we're adding a random overhead of 0-10% to the reconnection timeout by default. You can disable this behaviour by setting this option to `true`.
