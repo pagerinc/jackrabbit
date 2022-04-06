@@ -93,6 +93,6 @@ You can configure some basic parameters of the reconnection process with some en
 
 Name|Default|Description
 -|-|-
-`RECONNECTION_TIMEOUT`| 2000 | ms between each reconnection attempt. The first attempt will always be immediate.
-`RECONNECTION_RETRIES`| 20 | Amount of retries before erroring out and killing the node process.
-`RECONNECTION_EXACT_TIMEOUT` | false | To prevent total outages on HA services, we're adding a random overhead of 0-10% to the reconnection timeout by default. You can disable this behaviour by setting this option to `true`.
+`RABBIT_RECONNECTION_TIMEOUT`| 2000 | ms between each reconnection attempt. The first attempt will always be immediate.
+`RABBIT_RECONNECTION_RETRIES`| 20 | Amount of retries before erroring out and killing the node process.
+`RABBIT_RECONNECTION_EXACT_TIMEOUT` | false | To prevent total outages on HA services, we're adding a random overhead of 0-10% to the reconnection timeout by default. You can disable this behaviour by setting this option to `true`.
