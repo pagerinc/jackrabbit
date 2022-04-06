@@ -8,8 +8,6 @@ const Queue = require('../lib/queue');
 
 const { afterEach, beforeEach, describe, it } = require('mocha');
 
-process.env.RABBIT_URL = 'amqp://localhost:5672';
-
 describe('queue', () => {
 
     let connection;

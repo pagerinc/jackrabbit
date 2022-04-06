@@ -239,9 +239,11 @@ describe('exchange', () => {
                 const message = Uuid();
 
                 const queue = exchange.queue({ keys, exclusive: true });
+                console.log('queued');
 
                 queue.consume((data, ack, nack, msg) => {
 
+                    console.log('got message', data);
                     Assert.equal(message, data);
                     Assert.equal(msg.fields.routingKey, finalKey);
                     ack();
@@ -250,6 +252,7 @@ describe('exchange', () => {
 
                 queue.once('bound', () => {
 
+                    console.log('bound');
                     exchange.publish(message, { key: finalKey });
                 });
             });
