@@ -11,8 +11,9 @@ const AMQP_PORT = 8080;
 
 describe('reconnection', () => {
 
-    const RECONN_TIMEOUT = 4;
-    const RECONN_RETRIES = 5;
+    let RECONN_TIMEOUT;
+    let RECONN_RETRIES;
+    let EXACT_TIMEOUT;
     const STUB_RABBIT_URL = `amqp://localhost:${AMQP_PORT}`;
 
     let AmqpStub;
@@ -24,8 +25,9 @@ describe('reconnection', () => {
         Sinon.stub(process, 'exit');
         AmqpStub = Sinon.stub(Amqp, 'connect');
 
-        process.env.RABBIT_RECONNECTION_TIMEOUT = RECONN_TIMEOUT;
-        process.env.RABBIT_RECONNECTION_RETRIES = RECONN_RETRIES;
+        RECONN_TIMEOUT = 4;
+        RECONN_RETRIES = 5;
+        EXACT_TIMEOUT = false;
 
         done();
     });
@@ -72,7 +74,7 @@ describe('reconnection', () => {
         });
     };
 
-    const mockRabbitServer = async ({ logger, stub, rabbit, exchangeCount = 0, queueCount = 0, consumerCount = queueCount, uniqueKeys = queueCount }) => {
+    const mockRabbitServer = async ({ logger, stub, rabbit = undefined, exchangeCount = 0, queueCount = 0, consumerCount = queueCount, uniqueKeys = queueCount }) => {
 
         if (!stub) {
             stub = Sinon.stub(Amqp, 'connect');
@@ -81,6 +83,9 @@ describe('reconnection', () => {
         const reconnecting = rabbit !== undefined;
         let opts = undefined;
         if (!rabbit) {
+            process.env.RABBIT_RECONNECTION_TIMEOUT = RECONN_TIMEOUT;
+            process.env.RABBIT_RECONNECTION_RETRIES = RECONN_RETRIES;
+            process.env.RABBIT_RECONNECTION_EXACT_TIMEOUT = EXACT_TIMEOUT;
             rabbit = Jackrabbit(STUB_RABBIT_URL, logger, opts = {});
         }
 
@@ -134,6 +139,7 @@ describe('reconnection', () => {
 
     const rabbitStartError = (amqpStub) => {
 
+        amqpStub.reset();
         amqpStub.callsFake((url, cb) =>
 
             setTimeout(() => {
@@ -145,31 +151,125 @@ describe('reconnection', () => {
 
     const rabbitStopError = (amqpStub) => amqpStub.reset();
 
-    it('Healthy connections should be unafected', () => {
+    it('Healthy connections should remain unafected', () => {
 
     });
 
-    it('Should trigger when connection is lost', () => {
+    it('Should trigger when connection is lost', async () => {
 
+        const logger = mockLogger();
+        const { conn, opts } = await mockRabbitServer({ logger, stub: AmqpStub });
+
+        const lostConnection = new Error('Connection to RabbitMQ lost');
+        lostConnection.code = 320;
+
+        const asyncClose = waitEvent(conn, 'close', 10);
+        conn.emit('close', lostConnection);
+        await asyncClose; // Everything should occur inside this awaiter.
+
+        // check logs
+        logger.assert('warn', `Lost connection to RabbitMQ! Reconnecting in ${opts.reconnectionTimeout}ms...`);
     });
 
-    it('Should read retry env vars', () => {
+    it('Should read retry env vars', async () => {
 
+        RECONN_TIMEOUT = 1000 + Math.floor(Math.random() * 3000);
+        RECONN_RETRIES = Math.ceil(Math.random() * 10);
+        EXACT_TIMEOUT = true;
+
+        const server = await mockRabbitServer({ logger: mockLogger(), stub: AmqpStub });
+
+        Assert.strictEqual(server.opts.reconnectionTimeout, RECONN_TIMEOUT);
+        Assert.strictEqual(server.opts.maxRetries, RECONN_RETRIES);
     });
 
-    it('Should default to inexact reconnection time', () => {
+    it('Should default to inexact reconnection time', async () => {
 
+        RECONN_TIMEOUT = 2000;
+
+        const logger = mockLogger();
+        for (let i = 0; i < 3; ++i) {
+            const server = await mockRabbitServer({ logger, stub: AmqpStub });
+            if (server.opts.reconnectionTimeout > RECONN_TIMEOUT) {
+                return;
+            }
+
+            AmqpStub.reset();
+        }
+
+        Assert.fail('Reconnection timeout did not change');
     });
 
-    it('Should have a random reconnection overhead of up to 10% when on inexact mode', () => {
+    it('Should have a random reconnection overhead of up to 10% when on inexact mode', async () => {
 
+        RECONN_TIMEOUT = 2000;
+        const min = RECONN_TIMEOUT;
+        const max = RECONN_TIMEOUT * 1.1;
+
+        const logger = mockLogger();
+        for (let i = 0; i < 100; ++i) {
+            const server = await mockRabbitServer({ logger, stub: AmqpStub });
+            Assert.isAtLeast(server.opts.reconnectionTimeout, min);
+            Assert.isBelow(server.opts.reconnectionTimeout, max);
+
+            AmqpStub.reset();
+        }
     });
 
-    it('Should retry immediately after disconnecting', () => {
+    it('Should retry immediately after disconnecting', async () => {
 
+        const logger = mockLogger();
+        const { conn, rabbit, opts } = await mockRabbitServer({ logger, stub: AmqpStub });
+
+        const lostConnection = new Error('Connection to RabbitMQ lost');
+        lostConnection.code = 320;
+
+        let gotReconnecting = false;
+        waitEvent(rabbit, 'reconnecting', 10).then(() => (gotReconnecting = true));
+
+        const asyncClose = waitEvent(conn, 'close', 10);
+        conn.emit('close', lostConnection);
+        await asyncClose; // Everything should occur inside this awaiter.
+
+        Assert.strictEqual(gotReconnecting, true);
+
+        // check logs
+        logger.assert('warn', `Lost connection to RabbitMQ! Reconnecting in ${opts.reconnectionTimeout}ms...`);
+        logger.assert('info', 'Reconnecting to RabbitMQ (1/5)...');
     });
 
-    it('Should exit after exhausting reconnection attempts', () => {
+    it('Should exit after exhausting reconnection attempts', async () => {
+
+        RECONN_RETRIES = 4;
+
+        const logger = mockLogger();
+        const { conn, rabbit, opts } = await mockRabbitServer({ logger, stub: AmqpStub });
+        const asyncReconn = waitEvent(rabbit, 'reconnecting', RECONN_TIMEOUT * .6); // immediate reconnection
+
+        const lostConnection = new Error('Connection to RabbitMQ lost');
+        lostConnection.code = 320;
+
+        rabbitStartError(AmqpStub);
+        conn.emit('close', lostConnection);
+
+        await asyncReconn;
+        await waitEvent(rabbit, 'reconnecting', Math.max(15, RECONN_TIMEOUT * 1.3)); // second attempt
+        await waitEvent(rabbit, 'reconnecting', Math.max(15, RECONN_TIMEOUT * 1.3)); // third attempt
+        await Promise.all([
+            waitEvent(rabbit, 'reconnecting', Math.max(15, RECONN_TIMEOUT * 1.3)), // fourth attempt
+            waitEvent(rabbit, 'error', Math.max(15, RECONN_TIMEOUT * 1.3)) // reconn error
+        ]);
+
+        Assert.strictEqual(process.exit.callCount, 1);
+        Assert.strictEqual(process.exit.args[0][0], 1);
+
+        // check logs
+        logger.assert('warn', `Lost connection to RabbitMQ! Reconnecting in ${opts.reconnectionTimeout}ms...`);
+        logger.assert('info', 'Reconnecting to RabbitMQ (1/4)...');
+        logger.assert('info', 'Reconnecting to RabbitMQ (2/4)...');
+        logger.assert('info', 'Reconnecting to RabbitMQ (3/4)...');
+        logger.assert('info', 'Reconnecting to RabbitMQ (4/4)...');
+        logger.assert('fatal', 'Rabbit connection error!');
 
     });
 
@@ -207,8 +307,44 @@ describe('reconnection', () => {
 
     });
 
-    it('Should be able to reconnect multiple times', () => {
+    it('Should be able to reconnect multiple times', async () => {
 
+        const logger = mockLogger();
+        let { conn, rabbit, opts } = await mockRabbitServer({ logger, stub: AmqpStub });
+        let asyncReconn = waitEvent(rabbit, 'reconnecting', RECONN_TIMEOUT * .6); // immediate reconnection
+
+        const lostConnection = new Error('Connection to RabbitMQ lost');
+        lostConnection.code = 320;
+
+        rabbitStartError(AmqpStub);
+        conn.emit('close', lostConnection);
+        await asyncReconn;
+
+        rabbitStopError(AmqpStub);
+
+        await waitEvent(rabbit, 'reconnecting', Math.max(15, RECONN_TIMEOUT * 1.3)); // second attempt
+
+        let newServer = await mockRabbitServer({ logger, stub: AmqpStub, rabbit });
+        conn = newServer.conn;
+
+        logger.assert('warn', `Lost connection to RabbitMQ! Reconnecting in ${opts.reconnectionTimeout}ms...`);
+        logger.assert('info', 'Reconnecting to RabbitMQ (1/5)...');
+        logger.assert('info', 'Reconnecting to RabbitMQ (2/5)...');
+        logger.assert('info', 'Reconnected to RabbitMQ');
+
+        const reconnections = Math.ceil(Math.random() * 8);
+        for (let i = 0; i < reconnections; ++i) {
+            AmqpStub.reset();
+            asyncReconn = waitEvent(rabbit, 'reconnecting', RECONN_TIMEOUT * .6); // immediate reconnection
+            conn.emit('close', lostConnection);
+            await asyncReconn;
+            newServer = await mockRabbitServer({ logger, stub: AmqpStub, rabbit });
+            conn = newServer.conn;
+
+            logger.assert('warn', `Lost connection to RabbitMQ! Reconnecting in ${opts.reconnectionTimeout}ms...`);
+            logger.assert('info', 'Reconnecting to RabbitMQ (1/5)...');
+            logger.assert('info', 'Reconnected to RabbitMQ');
+        }
     });
 
 });
