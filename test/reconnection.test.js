@@ -74,13 +74,13 @@ describe('reconnection', () => {
         });
     };
 
-    const mockRabbitServer = async ({ logger, stub, rabbit = undefined, exchangeCount = 0, queueCount = 0, consumerCount = queueCount, uniqueKeys = queueCount }) => {
+    const mockRabbitServer = async ({ logger = undefined, stub, rabbit = undefined, addQueues = undefined, isReconnecting = undefined, exchangeCount = 0, queueCount = 0, consumerCount = queueCount, uniqueKeys = queueCount }) => {
 
         if (!stub) {
             stub = Sinon.stub(Amqp, 'connect');
         }
 
-        const reconnecting = rabbit !== undefined;
+        const reconnecting = rabbit !== undefined && isReconnecting !== false;
         let opts = undefined;
         if (!rabbit) {
             process.env.RABBIT_RECONNECTION_TIMEOUT = RECONN_TIMEOUT;
@@ -113,6 +113,7 @@ describe('reconnection', () => {
             conn.assertQueue = Sinon.stub().callsFake((queue, options, cb) => setTimeout(() => cb(null, { queue: queue || genQueueName() }), 1));
             conn.bindQueue = Sinon.stub().callsFake((queue, exchange, routingKey, options, cb) => setTimeout(cb, 1));
             conn.consume = Sinon.stub();
+            conn.publish = Sinon.stub().callsFake((exchange, routingKey, content, options) => setTimeout(() => {}, 1));
 
             return conn;
         };
@@ -130,6 +131,10 @@ describe('reconnection', () => {
         const onConnect = waitEvent(rabbit, reconnecting ? 'reconnected' : 'connected');
         const conn = mockConnection();
         stub.args[0][1](null, conn);
+        if (addQueues) {
+            await addQueues();
+        }
+
         await onConnect;
 
         verifyConnection(conn);
@@ -150,10 +155,6 @@ describe('reconnection', () => {
     };
 
     const rabbitStopError = (amqpStub) => amqpStub.reset();
-
-    it('Healthy connections should remain unafected', () => {
-
-    });
 
     it('Should trigger when connection is lost', async () => {
 
@@ -303,8 +304,49 @@ describe('reconnection', () => {
 
     });
 
-    it('Should be able to publish and consume after reconnecting', () => {
+    it('Should be able to publish and consume after reconnecting', async () => {
 
+        const logger = mockLogger();
+        const opts = {};
+        process.env.RABBIT_RECONNECTION_TIMEOUT = RECONN_TIMEOUT;
+        process.env.RABBIT_RECONNECTION_RETRIES = RECONN_RETRIES;
+        process.env.RABBIT_RECONNECTION_EXACT_TIMEOUT = EXACT_TIMEOUT;
+        const rabbit = Jackrabbit(STUB_RABBIT_URL, logger, opts);
+        const exchange = rabbit.exchange('direct', 'my.queue');
+        let queue;
+
+        let { conn } = await mockRabbitServer({
+            rabbit, stub: AmqpStub, isReconnecting: false, exchangeCount: 1, queueCount: 1,
+            addQueues: async () => {
+
+                queue = exchange.queue({ key: 'test' });
+                queue.consume(() => {});
+                await waitEvent(queue, 'bound');
+            }
+        });
+        const asyncReconn = waitEvent(rabbit, 'reconnecting', RECONN_TIMEOUT * .6); // immediate reconnection
+
+        const lostConnection = new Error('Connection to RabbitMQ lost');
+        lostConnection.code = 320;
+
+        rabbitStartError(AmqpStub);
+        conn.emit('close', lostConnection);
+        await asyncReconn;
+
+        rabbitStopError(AmqpStub);
+
+        await waitEvent(rabbit, 'reconnecting', Math.max(15, RECONN_TIMEOUT * 1.3)); // second attempt
+        const server = await mockRabbitServer({ logger, stub: AmqpStub, rabbit, exchangeCount: 1, queueCount: 1, uniqueKeys: 0, consumerCount: 0 });
+        conn = server.conn;
+
+        logger.assert('warn', `Lost connection to RabbitMQ! Reconnecting in ${opts.reconnectionTimeout}ms...`);
+        logger.assert('info', 'Reconnecting to RabbitMQ (1/5)...');
+        logger.assert('info', 'Reconnecting to RabbitMQ (2/5)...');
+        logger.assert('info', 'Reconnected to RabbitMQ');
+
+        const message = 'hakuna matata';
+        exchange.publish(message, { key: 'test' });
+        Assert.equal(conn.publish.callCount, 1);
     });
 
     it('Should be able to reconnect multiple times', async () => {
