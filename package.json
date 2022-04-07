@@ -56,7 +56,7 @@
     "sinon": "11.x"
   },
   "mocha": {
-    "bail": false,
+    "bail": true,
     "recursive": true
   },
   "scripts": {
