@@ -9,8 +9,6 @@ const { v4: Uuid } = require('uuid');
 
 const { afterEach, beforeEach, describe, it } = require('mocha');
 
-process.env.RABBIT_URL = 'amqp://localhost:5672';
-
 describe('exchange', () => {
 
     describe('constructor', () => {
