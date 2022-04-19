@@ -1,3 +1,10 @@
+# [5.4.0](https://github.com/pagerinc/jackrabbit/compare/v5.3.1...v5.4.0) (2022-04-19)
+
+
+### Features
+
+* ENG-4019 Gracefully reconnect to rabbit ([#861](https://github.com/pagerinc/jackrabbit/issues/861)) ([62d025c](https://github.com/pagerinc/jackrabbit/commit/62d025ccf05e08d1d512aa87920a4266f69a0916))
+
 ## [5.3.1](https://github.com/pagerinc/jackrabbit/compare/v5.3.0...v5.3.1) (2021-05-28)
 
 
