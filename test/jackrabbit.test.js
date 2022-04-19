@@ -1,5 +1,6 @@
 'use strict';
 
+require('dotenv').config();
 const Assert = require('chai').assert;
 const Jackrabbit = require('../lib/jackrabbit');
 

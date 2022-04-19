@@ -40,18 +40,19 @@
     "Hunter Loftis <hunter@hunterloftis.com>"
   ],
   "dependencies": {
-    "amqplib": "0.7.x",
+    "amqplib": "0.8.x",
     "lodash.assignin": "4.x",
     "uuid": "8.x"
   },
   "devDependencies": {
     "@pager/semantic-release-config": "1.x",
     "chai": "4.x",
+    "dotenv": "16.0.0",
     "eslint": "7.x",
     "eslint-config-hapi": "12.x",
     "eslint-plugin-hapi": "4.x",
     "mocha": "9.x",
-    "semantic-release": "17.x",
+    "semantic-release": "19.x",
     "sinon": "11.x"
   },
   "mocha": {

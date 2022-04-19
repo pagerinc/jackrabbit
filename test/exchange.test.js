@@ -1,5 +1,6 @@
 'use strict';
 
+require('dotenv').config();
 const Assert = require('chai').assert;
 const Amqp = require('amqplib/callback_api');
 const Exchange = require('../lib/exchange');
