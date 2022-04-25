@@ -1,3 +1,10 @@
+## [5.4.1](https://github.com/pagerinc/jackrabbit/compare/v5.4.0...v5.4.1) (2022-04-25)
+
+
+### Bug Fixes
+
+* reply queue names not updated and race cond ([#872](https://github.com/pagerinc/jackrabbit/issues/872)) ([34ecacf](https://github.com/pagerinc/jackrabbit/commit/34ecacff36271b8d1d66abe1c6a0b80cae0ce4e8))
+
 # [5.4.0](https://github.com/pagerinc/jackrabbit/compare/v5.3.1...v5.4.0) (2022-04-19)
 
 
