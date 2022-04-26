@@ -53,7 +53,7 @@
     "eslint-plugin-hapi": "4.x",
     "mocha": "9.x",
     "semantic-release": "19.x",
-    "sinon": "11.x"
+    "sinon": "13.x"
   },
   "mocha": {
     "bail": true,
