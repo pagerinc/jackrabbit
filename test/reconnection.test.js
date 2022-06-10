@@ -239,6 +239,50 @@ describe('reconnection', () => {
         logger.assert('info', 'Reconnecting to RabbitMQ (1/5)...');
     });
 
+    it('Should support connection refused errors', async () => {
+
+        const logger = mockLogger();
+        const { conn, rabbit, opts } = await mockRabbitServer({ logger, stub: AmqpStub });
+
+        const lostConnection = new Error('got ECONNREFUSED error on 127.0.0.1');
+        lostConnection.code = 'ECONNREFUSED';
+
+        let gotReconnecting = false;
+        waitEvent(rabbit, 'reconnecting', 10).then(() => (gotReconnecting = true));
+
+        const asyncClose = waitEvent(conn, 'close', 10);
+        conn.emit('close', lostConnection);
+        await asyncClose; // Everything should occur inside this awaiter.
+
+        Assert.strictEqual(gotReconnecting, true);
+
+        // check logs
+        logger.assert('warn', `Lost connection to RabbitMQ! Reconnecting in ${opts.reconnectionTimeout}ms...`);
+        logger.assert('info', 'Reconnecting to RabbitMQ (1/5)...');
+    });
+
+    it('Should support connection reset errors', async () => {
+
+        const logger = mockLogger();
+        const { conn, rabbit, opts } = await mockRabbitServer({ logger, stub: AmqpStub });
+
+        const lostConnection = new Error('unexpected close: ECONNRESET');
+        lostConnection.code = 'ECONNRESET';
+
+        let gotReconnecting = false;
+        waitEvent(rabbit, 'reconnecting', 10).then(() => (gotReconnecting = true));
+
+        const asyncClose = waitEvent(conn, 'close', 10);
+        conn.emit('close', lostConnection);
+        await asyncClose; // Everything should occur inside this awaiter.
+
+        Assert.strictEqual(gotReconnecting, true);
+
+        // check logs
+        logger.assert('warn', `Lost connection to RabbitMQ! Reconnecting in ${opts.reconnectionTimeout}ms...`);
+        logger.assert('info', 'Reconnecting to RabbitMQ (1/5)...');
+    });
+
     it('Should exit after exhausting reconnection attempts', async () => {
 
         RECONN_RETRIES = 4;
