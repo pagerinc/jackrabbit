@@ -130,7 +130,7 @@ describe('reconnection', () => {
 
         const onConnect = waitEvent(rabbit, reconnecting ? 'reconnected' : 'connected');
         const conn = mockConnection();
-        stub.args[0][1](null, conn);
+        stub.args[0][2](null, conn);
         if (addQueues) {
             await addQueues();
         }
@@ -145,7 +145,7 @@ describe('reconnection', () => {
     const rabbitStartError = (amqpStub) => {
 
         amqpStub.reset();
-        amqpStub.callsFake((url, cb) =>
+        amqpStub.callsFake((url, undefined, cb) =>
 
             setTimeout(() => {
 
