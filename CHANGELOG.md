@@ -1,3 +1,10 @@
+## [5.4.3](https://github.com/pagerinc/jackrabbit/compare/v5.4.2...v5.4.3) (2022-07-14)
+
+
+### Bug Fixes
+
+* connection failure logic to better handle more connection errors ([#893](https://github.com/pagerinc/jackrabbit/issues/893)) ([e360514](https://github.com/pagerinc/jackrabbit/commit/e3605147cf0ba4a8987a6cf720ce87a41fa12ca2))
+
 ## [5.4.2](https://github.com/pagerinc/jackrabbit/compare/v5.4.1...v5.4.2) (2022-06-10)
 
 
