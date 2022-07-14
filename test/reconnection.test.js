@@ -251,6 +251,7 @@ describe('reconnection', () => {
         waitEvent(rabbit, 'reconnecting', 10).then(() => (gotReconnecting = true));
 
         const asyncClose = waitEvent(conn, 'close', 10);
+        conn.emit('error', lostConnection);
         conn.emit('close', lostConnection);
         await asyncClose; // Everything should occur inside this awaiter.
 
@@ -273,6 +274,7 @@ describe('reconnection', () => {
         waitEvent(rabbit, 'reconnecting', 10).then(() => (gotReconnecting = true));
 
         const asyncClose = waitEvent(conn, 'close', 10);
+        conn.emit('error', lostConnection);
         conn.emit('close', lostConnection);
         await asyncClose; // Everything should occur inside this awaiter.
 
