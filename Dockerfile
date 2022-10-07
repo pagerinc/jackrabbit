@@ -1,4 +1,4 @@
-FROM node:14.20-alpine@sha256:0a37794193aa27ba8af16a2da0998a3e0c551fcc4ebec2ce95b1615032daf820
+FROM node:14.20-alpine@sha256:1ef3426a3de44924d76f884741164ec8f5f5e2d5f10ce878fab242540458d12a
 
 RUN apk add --no-cache tini
 
