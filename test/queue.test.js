@@ -101,6 +101,19 @@ describe('queue', () => {
                 exchange.publish(message, { key: name });
             });
         });
+
+        it('consumes empty payloads', (done) => {
+
+            queue.consume((data) => {
+
+                Assert.equal(data, null);
+                done();
+            });
+            queue.on('ready', () => {
+
+                exchange.publish(null, { key: name });
+            });
+        });
     });
 
     describe('cancel', () => {
