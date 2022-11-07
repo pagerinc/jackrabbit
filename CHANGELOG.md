@@ -1,3 +1,10 @@
+## [5.4.4](https://github.com/pagerinc/jackrabbit/compare/v5.4.3...v5.4.4) (2022-11-07)
+
+
+### Bug Fixes
+
+* allow empty payloads ([#942](https://github.com/pagerinc/jackrabbit/issues/942)) ([af1e3ae](https://github.com/pagerinc/jackrabbit/commit/af1e3ae7e8d437b86e56f4c98b073d9d0e138ddf))
+
 ## [5.4.3](https://github.com/pagerinc/jackrabbit/compare/v5.4.2...v5.4.3) (2022-07-14)
 
 
