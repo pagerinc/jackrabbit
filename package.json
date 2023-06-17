@@ -47,7 +47,7 @@
   "devDependencies": {
     "@pager/semantic-release-config": "2.x",
     "chai": "4.x",
-    "dotenv": "16.1.4",
+    "dotenv": "16.2.0",
     "eslint": "7.x",
     "eslint-config-hapi": "12.x",
     "eslint-plugin-hapi": "4.x",
