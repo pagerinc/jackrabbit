@@ -1,0 +1,52 @@
+steps:
+
+  - id: npm-lockfile
+    name: node:18
+    secretEnv: ['NPM_TOKEN']
+    entrypoint: npm
+    args: ['i', '--quiet', '--package-lock-only']
+
+  - id: npm-audit
+    name: 'gcr.io/$PROJECT_ID/cloudbuilders/audit-exclude'
+    secretEnv: ['NPM_TOKEN']
+    entrypoint: '/bin/ash'
+    args:
+      - -c
+      - npm audit --production --json | audit-exclude
+
+  - id: npm-ci
+    name: node:18-alpine
+    secretEnv: ["NPM_TOKEN"]
+    entrypoint: npm
+    args: [ 'ci', '--quiet' ]
+    waitFor: ['npm-lockfile']
+
+  - id: lint
+    name: node:18-alpine
+    secretEnv: ["NPM_TOKEN"]
+    entrypoint: npm
+    args: [ 'run', 'test' ]
+
+  - id: npm-publish
+    name: 'gcr.io/$PROJECT_ID/cloudbuilders/npm:6.13.4'
+    secretEnv: ['NPM_TOKEN']
+    env:
+      - 'TAG_NAME=$TAG_NAME'
+      - '_PR_NUMBER=$_PR_NUMBER'
+
+timeout: 10m
+
+logsBucket: 'gs://$PROJECT_ID-primary-cloudbuild-logs'
+
+tags:
+  - 'backend'
+  - 'npm'
+  - 'nodejs'
+
+secrets:
+  - kmsKeyName: projects/production-197117/locations/global/keyRings/gcb/cryptoKeys/main
+    secretEnv:
+      NPM_TOKEN: 'CiUA/4lqmXwRPPaGHe+X7TS7mwqARNCw5QFq7yfq7ESHaJrf+tzeElEADvOwrLQvnxCLG2wy+H2vD+DWHMosEgIfzpKNBJAVHX1u4FSwIF5utaN6tMIrLuZB18HnK2SKpsXTPvB/+0Eoz1acnj6WO+slz+GUGUnxefU='
+
+options:
+  machineType: E2_HIGHCPU_8
