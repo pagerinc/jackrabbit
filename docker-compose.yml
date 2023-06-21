@@ -23,10 +23,10 @@ services:
       RABBITMQ_DEFAULT_USER: "admin"
       RABBITMQ_DEFAULT_PASS: "${AMQP_PASSWD:-admin}"
     ports:
-      - "${AMQP_PORT:-5672}:5672"
-      - "${AMQP_MANAGEMENT_PORT:-15672}:15672"
+    - "${AMQP_ADDRESS:-127.0.0.1:5672}:5672"
+    - "${AMQP_MANAGEMENT_ADDRESS:-127.0.0.1:15672}:15672"
     volumes:
-      - "rabbitmq:/var/lib/rabbitmq"
+    - "rabbitmq:/var/lib/rabbitmq"
 
 ## NOTE: this is a requirement for cloud builds
 ## If docker-compose is not working for you, simply run
