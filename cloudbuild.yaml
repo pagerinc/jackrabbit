@@ -43,14 +43,8 @@ steps:
     args: [ 'run', 'test' ]
     env:
     - 'NODE_ENV=test'
-    - 'RABBIT_URL=amqp://admin:admin@rabbitmq:5672/db'
+    - 'RABBIT_URL=amqp://admin:admin@rabbitmq:5672'
     waitFor: ['npm-ci', 'docker-compose']
-    allowFailure: true
-
-  - id: docker-compose-logs
-    name: 'docker/compose:1.29.2'
-    args: [ 'logs', 'rabbitmq' ]
-    waitFor: [ 'test-e2e' ]
 
 #  - id: npm-publish
 #    name: 'gcr.io/$PROJECT_ID/cloudbuilders/npm:6.13.4'
