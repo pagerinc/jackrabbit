@@ -72,6 +72,7 @@ describe('exchange', () => {
 
             Amqp.connect(process.env.RABBIT_URL, (err, conn) => {
 
+                console.log('f43yh456j45', err, process.env);
                 Assert.ok(!err);
                 connection = conn;
                 done();
