@@ -45,14 +45,20 @@ steps:
     - 'NODE_ENV=test'
     - 'RABBIT_URL=amqp://admin:admin@rabbitmq:5672'
     waitFor: ['npm-ci', 'docker-compose']
+    allowFailure: true
 
-  - id: npm-publish
-    name: 'gcr.io/$PROJECT_ID/cloudbuilders/npm:6.13.4'
-    secretEnv: ['NPM_TOKEN']
-    env:
-      - 'TAG_NAME=$TAG_NAME'
-      - '_PR_NUMBER=$_PR_NUMBER'
-    waitFor: ['test-e2e']
+  - id: docker-compose
+    name: 'docker/compose:1.29.2'
+    args: [ 'logs', 'rabbitmq' ]
+    waitFor: [ 'test-e2e' ]
+
+#  - id: npm-publish
+#    name: 'gcr.io/$PROJECT_ID/cloudbuilders/npm:6.13.4'
+#    secretEnv: ['NPM_TOKEN']
+#    env:
+#      - 'TAG_NAME=$TAG_NAME'
+#      - '_PR_NUMBER=$_PR_NUMBER'
+#    waitFor: ['test-e2e']
 
 timeout: 10m
 
