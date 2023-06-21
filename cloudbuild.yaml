@@ -47,7 +47,7 @@ steps:
     waitFor: ['npm-ci', 'docker-compose']
     allowFailure: true
 
-  - id: docker-compose
+  - id: docker-compose-logs
     name: 'docker/compose:1.29.2'
     args: [ 'logs', 'rabbitmq' ]
     waitFor: [ 'test-e2e' ]
