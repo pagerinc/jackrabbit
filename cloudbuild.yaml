@@ -1,4 +1,14 @@
 steps:
+  - id: lint-yaml
+    name: 'gcr.io/$PROJECT_ID/cloudbuilders/yamllint:1.20.0'
+    args: ["-d", "relaxed", "."]
+    waitFor: ['-']
+
+  - id: lint-docker
+    name: 'gcr.io/$PROJECT_ID/cloudbuilders/hadolint:1.18.0'
+    args:
+      - Dockerfile
+    waitFor: ['-']
 
   - id: npm-lockfile
     name: node:18
@@ -42,6 +52,7 @@ steps:
     env:
       - 'TAG_NAME=$TAG_NAME'
       - '_PR_NUMBER=$_PR_NUMBER'
+    waitFor: ['test-e2e']
 
 timeout: 10m
 
