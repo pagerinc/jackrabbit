@@ -26,7 +26,7 @@ steps:
 
   - id: docker-compose
     name: 'docker/compose:1.29.2'
-    args: ['up', '-d']
+    args: ['up']
     waitFor: ['npm-audit', 'lint-yaml', 'lint-docker']
 
   - id: npm-ci
