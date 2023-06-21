@@ -1,5 +1,8 @@
 version: "3.7"
 
+volumes:
+  rabbitmq: {}
+
 services:
   jackrabbit-rpc-server:
     build: .
@@ -13,11 +16,17 @@ services:
       RABBIT_URL: 'amqp://rabbit'
     entrypoint: ['node', 'examples/7-timeout-rpc/client']
     restart: on-failure
-  rabbit:
+  rabbitmq:
     image: rabbitmq:3.12.0-management-alpine@sha256:2339b033a0bf6f1aa2b1838ad8dfe1dfaad2589df30095f95c2fe8b27d769446
+    restart: unless-stopped
+    environment:
+      RABBITMQ_DEFAULT_USER: "admin"
+      RABBITMQ_DEFAULT_PASS: "${AMQP_PASSWD:-admin}"
     ports:
-      - "5673:5672"
-      - "15673:15672"
+      - "${AMQP_PORT:-5672}:5672"
+      - "${AMQP_MANAGEMENT_PORT:-15672}:15672"
+    volumes:
+      - "rabbitmq:/var/lib/rabbitmq"
 
 ## NOTE: this is a requirement for cloud builds
 ## If docker-compose is not working for you, simply run
