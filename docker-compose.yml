@@ -7,13 +7,13 @@ services:
   jackrabbit-rpc-server:
     build: .
     environment:
-      RABBIT_URL: 'amqp://rabbit'
+      RABBIT_URL: 'amqp://rabbitmq'
     entrypoint: ['node', 'examples/7-timeout-rpc/server']
     restart: on-failure
   jackrabbit-rpc-client:
     build: .
     environment:
-      RABBIT_URL: 'amqp://rabbit'
+      RABBIT_URL: 'amqp://rabbitmq'
     entrypoint: ['node', 'examples/7-timeout-rpc/client']
     restart: on-failure
   rabbitmq:
