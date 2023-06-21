@@ -43,7 +43,7 @@ steps:
     args: [ 'run', 'test' ]
     env:
     - 'NODE_ENV=test'
-    - 'RABBIT_URL=amqp://admin:admin@rabbitmq:5672'
+    - 'RABBIT_URL=amqp://admin:admin@rabbitmq:5672/db'
     waitFor: ['npm-ci', 'docker-compose']
     allowFailure: true
 
