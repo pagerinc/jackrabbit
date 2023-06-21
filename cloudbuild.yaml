@@ -42,7 +42,7 @@ steps:
     entrypoint: npm
     env:
       - 'NODE_ENV=test'
-      - 'RABBIT_URL=amqp://admin:admin@rabbit:5672'
+      - 'RABBIT_URL=amqp://guest:guest@rabbit:5673'
     args: [ 'run', 'test' ]
     waitFor: ['npm-ci', 'docker-compose']
 
