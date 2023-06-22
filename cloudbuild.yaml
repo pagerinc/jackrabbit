@@ -46,6 +46,10 @@ steps:
     args: [ 'ps' ]
     waitFor: [ 'docker-compose' ]
 
+  - name: 'ubuntu'
+    args: [ 'sleep', '120' ]
+    waitFor: [ 'npm-ci', 'docker-compose' ]
+
   - id: test-e2e
     name: node:18.12
     secretEnv: ["NPM_TOKEN"]
@@ -54,7 +58,7 @@ steps:
     env:
       - 'NODE_ENV=test'
       - 'RABBIT_URL=amqp://admin:admin@rabbitmq:5672'
-    waitFor: ['npm-ci', 'docker-compose']
+    waitFor: ['ubuntu']
 
 #  - id: npm-publish
 #    name: 'gcr.io/$PROJECT_ID/cloudbuilders/npm:6.13.4'
