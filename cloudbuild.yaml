@@ -46,7 +46,8 @@ steps:
     args: [ 'ps' ]
     waitFor: [ 'docker-compose' ]
 
-  - name: 'ubuntu'
+  - id: ubuntu
+    name: 'ubuntu'
     args: [ 'sleep', '120' ]
     waitFor: [ 'npm-ci', 'docker-compose' ]
 
