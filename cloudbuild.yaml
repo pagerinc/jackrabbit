@@ -50,7 +50,7 @@ steps:
     name: node:18.12
     secretEnv: ["NPM_TOKEN"]
     entrypoint: npm
-    args: [ 'run', 'test' ]
+    args: ['test']
     env:
       - 'NODE_ENV=test'
       - 'RABBIT_URL=amqp://admin:admin@rabbitmq:5672'
