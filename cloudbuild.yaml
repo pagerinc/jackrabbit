@@ -29,12 +29,22 @@ steps:
     args: ['up', '-d']
     waitFor: ['npm-audit', 'lint-yaml', 'lint-docker']
 
+  - id: docker-compose-ps
+    name: 'docker/compose:1.29.2'
+    args: ['ps']
+    waitFor: ['docker-compose']
+
   - id: npm-ci
     name: node:18.12
     secretEnv: ["NPM_TOKEN"]
     entrypoint: npm
     args: [ 'ci', '--quiet' ]
     waitFor: ['npm-lockfile']
+
+  - id: docker-compose-ps2
+    name: 'docker/compose:1.29.2'
+    args: [ 'ps' ]
+    waitFor: [ 'docker-compose' ]
 
   - id: test-e2e
     name: node:18.12
@@ -46,13 +56,13 @@ steps:
       - 'RABBIT_URL=amqp://admin:admin@rabbitmq:5672'
     waitFor: ['npm-ci', 'docker-compose']
 
-  - id: npm-publish
-    name: 'gcr.io/$PROJECT_ID/cloudbuilders/npm:6.13.4'
-    secretEnv: ['NPM_TOKEN']
-    env:
-      - 'TAG_NAME=$TAG_NAME'
-      - '_PR_NUMBER=$_PR_NUMBER'
-    waitFor: ['test-e2e']
+#  - id: npm-publish
+#    name: 'gcr.io/$PROJECT_ID/cloudbuilders/npm:6.13.4'
+#    secretEnv: ['NPM_TOKEN']
+#    env:
+#      - 'TAG_NAME=$TAG_NAME'
+#      - '_PR_NUMBER=$_PR_NUMBER'
+#    waitFor: ['test-e2e']
 
 timeout: 10m
 
