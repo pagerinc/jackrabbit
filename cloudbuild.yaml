@@ -26,14 +26,14 @@ steps:
 
   - id: docker-compose
     name: 'docker/compose:1.29.2'
-    args: ['up', '-d']
+    args: ['up', '-d', '--wait' ]
     waitFor: ['npm-audit', 'lint-yaml', 'lint-docker']
 
   - id: npm-ci
     name: node:18.12
     secretEnv: ["NPM_TOKEN"]
     entrypoint: npm
-    args: [ 'ci', '--quiet' , '--wait' ]
+    args: [ 'ci', '--quiet']
     waitFor: ['npm-lockfile']
 
   - id: test-e2e
