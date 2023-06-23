@@ -25,8 +25,8 @@ steps:
       - npm audit --production --json | audit-exclude
 
   - id: docker-compose
-    name: 'docker/compose:1.29.2'
-    args: ['up', '-d', '--wait' ]
+    name: 'gcr.io/cloud-builders/docker'
+    args: ['compose', 'up', '-d', '--wait' ]
     waitFor: ['npm-audit', 'lint-yaml', 'lint-docker']
 
   - id: npm-ci
