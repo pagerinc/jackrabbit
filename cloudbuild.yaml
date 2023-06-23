@@ -46,10 +46,11 @@ steps:
     args: [ 'ps' ]
     waitFor: [ 'docker-compose' ]
 
-  - id: ubuntu
-    name: 'ubuntu'
-    args: [ 'sleep', '120' ]
-    waitFor: [ 'npm-ci', 'docker-compose' ]
+#  # Rabbit needs time to boot, docker-compose only backgrounds the process, we have no
+#  - id: ubuntu
+#    name: 'ubuntu'
+#    args: [ 'sleep', '120' ]
+#    waitFor: [ 'npm-ci', 'docker-compose' ]
 
   - id: test-e2e
     name: node:18.12
@@ -59,7 +60,7 @@ steps:
     env:
       - 'NODE_ENV=test'
       - 'RABBIT_URL=amqp://admin:admin@rabbitmq:5672'
-    waitFor: ['ubuntu']
+    waitFor: [ 'npm-ci', 'docker-compose' ]
 
 #  - id: npm-publish
 #    name: 'gcr.io/$PROJECT_ID/cloudbuilders/npm:6.13.4'
