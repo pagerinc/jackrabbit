@@ -1,6 +1,6 @@
-FROM node:14.21-alpine@sha256:434215b487a329c9e867202ff89e704d3a75e554822e07f3e0c0f9e606121b33
+FROM node:18.12-alpine3.16@sha256:9eff44230b2fdcca57a73b8f908c8029e72d24dd05cac5339c79d3dedf6b208b
 
-RUN apk add --no-cache tini
+RUN apk add --no-cache tini=0.19.0-r0
 
 ENTRYPOINT ["/sbin/tini", "--"]
 

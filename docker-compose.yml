@@ -1,20 +1,42 @@
-version: '3'
+version: "3.7"
+
+volumes:
+  rabbitmq: {}
 
 services:
   jackrabbit-rpc-server:
     build: .
     environment:
-      RABBIT_URL: 'amqp://rabbit'
+      RABBIT_URL: 'amqp://admin:admin@rabbitmq'
     entrypoint: ['node', 'examples/7-timeout-rpc/server']
     restart: on-failure
   jackrabbit-rpc-client:
     build: .
     environment:
-      RABBIT_URL: 'amqp://rabbit'
+      RABBIT_URL: 'amqp://admin:admin@rabbitmq'
     entrypoint: ['node', 'examples/7-timeout-rpc/client']
     restart: on-failure
-  rabbit:
-    image: rabbitmq:3.12.0-management-alpine@sha256:2339b033a0bf6f1aa2b1838ad8dfe1dfaad2589df30095f95c2fe8b27d769446
+  rabbitmq:
+    image: rabbitmq:3.10.5-management-alpine@sha256:aa0ec77314f50f398a852311da5fe6f41a726220000ed0e5eba9a4205be75527
+    restart: unless-stopped
+    healthcheck:
+      test: rabbitmq-diagnostics -q ping
+      interval: 30s
+      timeout: 30s
+      retries: 3
+    environment:
+      RABBITMQ_DEFAULT_USER: "admin"
+      RABBITMQ_DEFAULT_PASS: "${AMQP_PASSWD:-admin}"
     ports:
-      - "5673:5672"
-      - "15673:15672"
+      - "${AMQP_PORT:-5672}:5672"
+      - "${AMQP_MANAGEMENT_PORT:-15672}:15672"
+    volumes:
+    - "rabbitmq:/var/lib/rabbitmq"
+
+## NOTE: this is a requirement for cloud builds
+## If docker-compose is not working for you, simply run
+## 'docker network create cloudbuild'
+##
+networks:
+  default:
+    name: cloudbuild
