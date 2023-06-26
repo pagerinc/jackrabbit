@@ -17,7 +17,7 @@ services:
     entrypoint: ['node', 'examples/7-timeout-rpc/client']
     restart: on-failure
   rabbitmq:
-    image: rabbitmq:3.10.5-management-alpine@sha256:aa0ec77314f50f398a852311da5fe6f41a726220000ed0e5eba9a4205be75527
+    image: rabbitmq:3.10.5-management-alpine@sha256:afceef7d5a4e9b3f5a0bec1e5b78bface72a2ca1a364a5e3918ca7eb453549fa
     restart: unless-stopped
     healthcheck:
       test: rabbitmq-diagnostics -q ping
