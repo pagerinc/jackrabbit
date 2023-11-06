@@ -65,6 +65,6 @@ tags:
 
 availableSecrets:
   secretManager:
-    - versionName: projects/145393225073/secrets/npm-token-readonly/versions/latest
+    - versionName: projects/145393225073/secrets/npm-token-publish/versions/latest
       env: NPM_TOKEN
 
