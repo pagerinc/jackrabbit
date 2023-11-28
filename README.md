@@ -1,8 +1,6 @@
 # Jackrabbit
 
-This is a fork of [hunterloftis/jackrabbit].
-
-[![CircleCI](https://circleci.com/gh/pagerinc/jackrabbit.svg?style=svg)](https://circleci.com/gh/pagerinc/jackrabbit)
+This is a fork of [pagerinc/jackrabbit], which is a fork of [hunterloftis/jackrabbit].
 
 Jackrabbit is a very opinionated abstraction built on top of `amqplib` focused
 on usability and implementing several messaging patterns on RabbitMQ.
@@ -13,7 +11,7 @@ on usability and implementing several messaging patterns on RabbitMQ.
 // producer.js
 'use strict';
 
-const jackrabbit = require('@pager/jackrabbit');
+const jackrabbit = require('tibbarkcaj');
 const rabbit = jackrabbit(process.env.RABBIT_URL);
 
 rabbit
@@ -26,7 +24,7 @@ rabbit
 // consumer.js
 'use strict';
 
-const jackrabbit = require('@pager/jackrabbit');
+const jackrabbit = require('tibbarkcaj');
 const rabbit = jackrabbit(process.env.RABBIT_URL);
 
 rabbit
@@ -44,7 +42,7 @@ function onMessage(data) {
 ```js
 'use strict';
 
-const jackrabbit = require('@pager/jackrabbit');
+const jackrabbit = require('tibbarkcaj');
 const rabbit = jackrabbit(process.env.RABBIT_URL);
 
 rabbit
@@ -61,13 +59,13 @@ rabbit
 
 ## More Examples
 
-For now, the best usage help is can be found in [examples](https://github.com/pagerinc/jackrabbit/tree/master/examples),
+For now, the best usage help is can be found in [examples](https://github.com/akamaozu/tibbarkcaj/tree/master/examples),
 which map 1-to-1 with the official RabbitMQ tutorials.
 
 ## Installation
 
 ```
-npm install --save @pager/jackrabbit
+npm install --save tibbarkcaj
 ```
 
 ## Tests
@@ -80,6 +78,7 @@ to run them:
 $ docker-compose up
 ```
 
+[pagerinc/jackrabbit]: https://github.com/pagerinc/jackrabbit
 [hunterloftis/jackrabbit]: https://github.com/hunterloftis/jackrabbit
 
 ## Reconnection
