@@ -1,6 +1,6 @@
 {
-  "name": "@pager/jackrabbit",
-  "version": "5.4.4",
+  "name": "tibbarkcaj",
+  "version": "1.0.0",
   "description": "Easy RabbitMQ for node",
   "keywords": [
     "amqp",
@@ -17,10 +17,10 @@
   ],
   "repository": {
     "type": "git",
-    "url": "git://github.com/pagerinc/jackrabbit.git"
+    "url": "git://github.com/akamaozu/tibbarkcaj.git"
   },
-  "homepage": "https://github.com/pagerinc/jackrabbit",
-  "bugs": "https://github.com/pagerinc/jackrabbit/issues",
+  "homepage": "https://github.com/akamaozu/tibbarkcaj",
+  "bugs": "https://github.com/akamaozu/tibbarkcaj/issues",
   "main": "lib/jackrabbit.js",
   "renovate": {
     "extends": [
@@ -34,7 +34,7 @@
     "node": ">= v10.18.0"
   },
   "license": "MIT",
-  "author": "Pager Developers <engineering@pager.com>",
+  "author": "akamaozu <uzo@designbymobius.ca>",
   "contributors": [
     "Pager Developers <engineering@pager.com>",
     "Hunter Loftis <hunter@hunterloftis.com>"
