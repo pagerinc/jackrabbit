@@ -55,6 +55,9 @@
     "semantic-release": "21.x",
     "sinon": "15.x"
   },
+  "peerDependencies": {
+    "newrelic": "11.x"
+  },
   "mocha": {
     "bail": true,
     "recursive": true
