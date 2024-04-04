@@ -39,6 +39,9 @@
     "Pager Developers <engineering@pager.com>",
     "Hunter Loftis <hunter@hunterloftis.com>"
   ],
+  "peerDependencies": {
+    "newrelic": "^11.5.0"
+  },
   "dependencies": {
     "amqplib": "0.8.x",
     "lodash.assignin": "4.x",
