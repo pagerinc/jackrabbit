@@ -40,3 +40,4 @@ services:
 networks:
   default:
     name: cloudbuild
+    external: true
