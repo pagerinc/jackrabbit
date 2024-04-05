@@ -1,3 +1,10 @@
+# [5.5.0](https://github.com/pagerinc/jackrabbit/compare/v5.4.4...v5.5.0) (2024-04-05)
+
+
+### Features
+
+* **ODIN-169:** improve NR transaction naming in jackrabbit ([#989](https://github.com/pagerinc/jackrabbit/issues/989)) ([79096b3](https://github.com/pagerinc/jackrabbit/commit/79096b357e486b7e988a1b3ecfe7d3ef987c116f))
+
 ## [5.4.4](https://github.com/pagerinc/jackrabbit/compare/v5.4.3...v5.4.4) (2022-11-07)
 
 
