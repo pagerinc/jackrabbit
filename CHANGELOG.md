@@ -1,3 +1,10 @@
+## [5.5.1](https://github.com/pagerinc/jackrabbit/compare/v5.5.0...v5.5.1) (2024-05-29)
+
+
+### Bug Fixes
+
+* **LOKI-1813:** add return statement to help New Relic ([#991](https://github.com/pagerinc/jackrabbit/issues/991)) ([a44c412](https://github.com/pagerinc/jackrabbit/commit/a44c4124bd8f5512bca96e3d7db44523e09d8e03))
+
 # [5.5.0](https://github.com/pagerinc/jackrabbit/compare/v5.4.4...v5.5.0) (2024-04-05)
 
 
