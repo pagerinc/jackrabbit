@@ -1,11 +1,11 @@
 steps:
   - id: lint-yaml
-    name: 'gcr.io/$PROJECT_ID/cloudbuilders/yamllint:1.20.0'
+    name: 'us-east1-docker.pkg.dev/$PROJECT_ID/cloudbuilders/yamllint:1.20.0'
     args: ["-d", "relaxed", "."]
     waitFor: ['-']
 
   - id: lint-docker
-    name: 'gcr.io/$PROJECT_ID/cloudbuilders/hadolint:1.18.0'
+    name: 'us-east1-docker.pkg.dev/$PROJECT_ID/cloudbuilders/hadolint:1.18.0'
     args:
       - Dockerfile
     waitFor: ['-']
@@ -17,7 +17,7 @@ steps:
     args: ['i', '--quiet', '--package-lock-only']
 
   - id: npm-audit
-    name: 'gcr.io/$PROJECT_ID/cloudbuilders/audit-exclude'
+    name: 'us-east1-docker.pkg.dev/$PROJECT_ID/cloudbuilders/audit-exclude'
     secretEnv: ['NPM_TOKEN']
     entrypoint: '/bin/ash'
     args:
@@ -47,7 +47,7 @@ steps:
     waitFor: [ 'npm-ci', 'docker-compose' ]
 
   - id: npm-publish
-    name: 'gcr.io/$PROJECT_ID/cloudbuilders/npm:6.13.4'
+    name: 'us-east1-docker.pkg.dev/$PROJECT_ID/cloudbuilders/npm:6.13.4'
     secretEnv: ['NPM_TOKEN']
     env:
       - 'TAG_NAME=$TAG_NAME'
