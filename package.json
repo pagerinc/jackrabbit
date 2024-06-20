@@ -40,7 +40,7 @@
     "Hunter Loftis <hunter@hunterloftis.com>"
   ],
   "dependencies": {
-    "amqplib": "0.8.x",
+    "amqplib": "0.10.x",
     "lodash.assignin": "4.x",
     "uuid": "8.x"
   },
